@@ -1,57 +1,57 @@
 USE ROLE accountadmin;
 
-CREATE OR REPLACE WAREHOUSE tasty_bytes_dbt_wh
-    WAREHOUSE_SIZE = 'small'
-    WAREHOUSE_TYPE = 'standard'
-    AUTO_SUSPEND = 60
-    AUTO_RESUME = TRUE
-    INITIALLY_SUSPENDED = TRUE
-    COMMENT = 'warehouse for tasty bytes dbt demo';
+-- CREATE OR REPLACE WAREHOUSE tasty_bytes_dbt_wh
+--     WAREHOUSE_SIZE = 'small'
+--     WAREHOUSE_TYPE = 'standard'
+--     AUTO_SUSPEND = 60
+--     AUTO_RESUME = TRUE
+--     INITIALLY_SUSPENDED = TRUE
+--     COMMENT = 'warehouse for tasty bytes dbt demo';
 
-USE WAREHOUSE tasty_bytes_dbt_wh;
+-- USE WAREHOUSE tasty_bytes_dbt_wh;
 
-CREATE DATABASE IF NOT EXISTS tasty_bytes_dbt_db;
-CREATE OR REPLACE SCHEMA tasty_bytes_dbt_db.raw;
-CREATE OR REPLACE SCHEMA tasty_bytes_dbt_db.dev;
-CREATE OR REPLACE SCHEMA tasty_bytes_dbt_db.prod;
+-- CREATE DATABASE IF NOT EXISTS tasty_bytes_dbt_db;
+-- CREATE OR REPLACE SCHEMA emerson_bytes_dbt_db.raw;
+-- CREATE OR REPLACE SCHEMA tasty_bytes_dbt_db.dev;
+-- CREATE OR REPLACE SCHEMA tasty_bytes_dbt_db.prod;
 
 
-ALTER SCHEMA tasty_bytes_dbt_db.dev SET LOG_LEVEL = 'INFO';
-ALTER SCHEMA tasty_bytes_dbt_db.dev SET TRACE_LEVEL = 'ALWAYS';
-ALTER SCHEMA tasty_bytes_dbt_db.dev SET METRIC_LEVEL = 'ALL';
+-- ALTER SCHEMA tasty_bytes_dbt_db.dev SET LOG_LEVEL = 'INFO';
+-- ALTER SCHEMA tasty_bytes_dbt_db.dev SET TRACE_LEVEL = 'ALWAYS';
+-- ALTER SCHEMA tasty_bytes_dbt_db.dev SET METRIC_LEVEL = 'ALL';
 
-ALTER SCHEMA tasty_bytes_dbt_db.prod SET LOG_LEVEL = 'INFO';
-ALTER SCHEMA tasty_bytes_dbt_db.prod SET TRACE_LEVEL = 'ALWAYS';
-ALTER SCHEMA tasty_bytes_dbt_db.prod SET METRIC_LEVEL = 'ALL';
+-- ALTER SCHEMA tasty_bytes_dbt_db.prod SET LOG_LEVEL = 'INFO';
+-- ALTER SCHEMA tasty_bytes_dbt_db.prod SET TRACE_LEVEL = 'ALWAYS';
+-- ALTER SCHEMA tasty_bytes_dbt_db.prod SET METRIC_LEVEL = 'ALL';
 
-CREATE OR REPLACE API INTEGRATION git_integration
-  API_PROVIDER = git_https_api
-  API_ALLOWED_PREFIXES = ('https://github.com/')
-  ENABLED = TRUE;
+-- CREATE OR REPLACE API INTEGRATION git_integration
+--   API_PROVIDER = git_https_api
+--   API_ALLOWED_PREFIXES = ('https://github.com/')
+--   ENABLED = TRUE;
 
-CREATE OR REPLACE NETWORK RULE tasty_bytes_dbt_db.public.dbt_network_rule
-  MODE = EGRESS
-  TYPE = HOST_PORT
-  VALUE_LIST = ('hub.getdbt.com', 'codeload.github.com');
+-- CREATE OR REPLACE NETWORK RULE tasty_bytes_dbt_db.public.dbt_network_rule
+--   MODE = EGRESS
+--   TYPE = HOST_PORT
+--   VALUE_LIST = ('hub.getdbt.com', 'codeload.github.com');
 
-CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION dbt_access_integration
-  ALLOWED_NETWORK_RULES = (tasty_bytes_dbt_db.public.dbt_network_rule)
-  ENABLED = true;
+-- CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION dbt_access_integration
+--   ALLOWED_NETWORK_RULES = (tasty_bytes_dbt_db.public.dbt_network_rule)
+--   ENABLED = true;
 
-CREATE OR REPLACE FILE FORMAT tasty_bytes_dbt_db.public.csv_ff 
+CREATE OR REPLACE FILE FORMAT emerson_bytes_dbt_db.public.csv_ff 
 type = 'csv';
 
-CREATE OR REPLACE STAGE tasty_bytes_dbt_db.public.s3load
+CREATE OR REPLACE STAGE emerson_bytes_dbt_db.public.s3load
 COMMENT = 'Quickstarts S3 Stage Connection'
 url = 's3://sfquickstarts/frostbyte_tastybytes/'
-file_format = tasty_bytes_dbt_db.public.csv_ff;
+file_format = emerson_bytes_dbt_db.public.csv_ff;
 
 /*--
  raw zone table build 
 --*/
 
 -- country table build
-CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.country
+CREATE OR REPLACE TABLE emerson_bytes_dbt_db.raw.country
 (
     country_id NUMBER(18,0),
     country VARCHAR(16777216),
@@ -61,10 +61,10 @@ CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.country
     city VARCHAR(16777216),
     city_population VARCHAR(16777216)
 ) 
-COMMENT = '{"origin":"sf_sit-is", "name":"tasty-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
+COMMENT = '{"origin":"sf_sit-is", "name":"emerson-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
 
 -- franchise table build
-CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.franchise 
+CREATE OR REPLACE TABLE emerson_bytes_dbt_db.raw.franchise
 (
     franchise_id NUMBER(38,0),
     first_name VARCHAR(16777216),
@@ -74,10 +74,10 @@ CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.franchise
     e_mail VARCHAR(16777216),
     phone_number VARCHAR(16777216) 
 )
-COMMENT = '{"origin":"sf_sit-is", "name":"tasty-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
+COMMENT = '{"origin":"sf_sit-is", "name":"emerson-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
 
 -- location table build
-CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.location
+CREATE OR REPLACE TABLE emerson_bytes_dbt_db.raw.location
 (
     location_id NUMBER(19,0),
     placekey VARCHAR(16777216),
@@ -87,10 +87,10 @@ CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.location
     iso_country_code VARCHAR(16777216),
     country VARCHAR(16777216)
 )
-COMMENT = '{"origin":"sf_sit-is", "name":"tasty-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
+COMMENT = '{"origin":"sf_sit-is", "name":"emerson-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
 
 -- menu table build
-CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.menu
+CREATE OR REPLACE TABLE emerson_bytes_dbt_db.raw.menu
 (
     menu_id NUMBER(19,0),
     menu_type_id NUMBER(38,0),
@@ -104,10 +104,10 @@ CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.menu
     sale_price_usd NUMBER(38,4),
     menu_item_health_metrics_obj VARIANT
 )
-COMMENT = '{"origin":"sf_sit-is", "name":"tasty-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
+COMMENT = '{"origin":"sf_sit-is", "name":"emerson-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
 
 -- truck table build 
-CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.truck
+CREATE OR REPLACE TABLE emerson_bytes_dbt_db.raw.truck
 (
     truck_id NUMBER(38,0),
     menu_type_id NUMBER(38,0),
@@ -124,10 +124,10 @@ CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.truck
     franchise_id NUMBER(38,0),
     truck_opening_date DATE
 )
-COMMENT = '{"origin":"sf_sit-is", "name":"tasty-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
+COMMENT = '{"origin":"sf_sit-is", "name":"emerson-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
 
 -- order_header table build
-CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.order_header
+CREATE OR REPLACE TABLE emerson_bytes_dbt_db.raw.order_header
 (
     order_id NUMBER(38,0),
     truck_id NUMBER(38,0),
@@ -146,10 +146,10 @@ CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.order_header
     order_discount_amount VARCHAR(16777216),
     order_total NUMBER(38,4)
 )
-COMMENT = '{"origin":"sf_sit-is", "name":"tasty-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
+COMMENT = '{"origin":"sf_sit-is", "name":"emerson-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
 
 -- order_detail table build
-CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.order_detail 
+CREATE OR REPLACE TABLE emerson_bytes_dbt_db.raw.order_detail
 (
     order_detail_id NUMBER(38,0),
     order_id NUMBER(38,0),
@@ -161,10 +161,10 @@ CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.order_detail
     price NUMBER(38,4),
     order_item_discount_amount VARCHAR(16777216)
 )
-COMMENT = '{"origin":"sf_sit-is", "name":"tasty-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
+COMMENT = '{"origin":"sf_sit-is", "name":"emerson-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
 
 -- customer loyalty table build
-CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.customer_loyalty
+CREATE OR REPLACE TABLE emerson_bytes_dbt_db.raw.customer_loyalty
 (
     customer_id NUMBER(38,0),
     first_name VARCHAR(16777216),
@@ -182,43 +182,43 @@ CREATE OR REPLACE TABLE tasty_bytes_dbt_db.raw.customer_loyalty
     e_mail VARCHAR(16777216),
     phone_number VARCHAR(16777216)
 )
-COMMENT = '{"origin":"sf_sit-is", "name":"tasty-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
+COMMENT = '{"origin":"sf_sit-is", "name":"emerson-bytes-dbt", "version":{"major":1, "minor":0}, "attributes":{"is_quickstart":1, "source":"sql"}}';
 
 /*--
  raw zone table load 
 --*/
 
 -- country table load
-COPY INTO tasty_bytes_dbt_db.raw.country
-FROM @tasty_bytes_dbt_db.public.s3load/raw_pos/country/;
+COPY INTO emerson_bytes_dbt_db.raw.country
+FROM @emerson_bytes_dbt_db.public.s3load/raw_pos/country/;
 
 -- franchise table load
-COPY INTO tasty_bytes_dbt_db.raw.franchise
-FROM @tasty_bytes_dbt_db.public.s3load/raw_pos/franchise/;
+COPY INTO emerson_bytes_dbt_db.raw.franchise
+FROM @emerson_bytes_dbt_db.public.s3load/raw_pos/franchise/;
 
 -- location table load
-COPY INTO tasty_bytes_dbt_db.raw.location
-FROM @tasty_bytes_dbt_db.public.s3load/raw_pos/location/;
+COPY INTO emerson_bytes_dbt_db.raw.location
+FROM @emerson_bytes_dbt_db.public.s3load/raw_pos/location/;
 
 -- menu table load
-COPY INTO tasty_bytes_dbt_db.raw.menu
-FROM @tasty_bytes_dbt_db.public.s3load/raw_pos/menu/;
+COPY INTO emerson_bytes_dbt_db.raw.menu
+FROM @emerson_bytes_dbt_db.public.s3load/raw_pos/menu/;
 
 -- truck table load
-COPY INTO tasty_bytes_dbt_db.raw.truck
-FROM @tasty_bytes_dbt_db.public.s3load/raw_pos/truck/;
+COPY INTO emerson_bytes_dbt_db.raw.truck
+FROM @emerson_bytes_dbt_db.public.s3load/raw_pos/truck/;
 
 -- customer_loyalty table load
-COPY INTO tasty_bytes_dbt_db.raw.customer_loyalty
-FROM @tasty_bytes_dbt_db.public.s3load/raw_customer/customer_loyalty/;
+COPY INTO emerson_bytes_dbt_db.raw.customer_loyalty
+FROM @emerson_bytes_dbt_db.public.s3load/raw_customer/customer_loyalty/;
 
 -- order_header table load
-COPY INTO tasty_bytes_dbt_db.raw.order_header
-FROM @tasty_bytes_dbt_db.public.s3load/raw_pos/order_header/;
+COPY INTO emerson_bytes_dbt_db.raw.order_header
+FROM @emerson_bytes_dbt_db.public.s3load/raw_pos/order_header/;
 
 -- order_detail table load
-COPY INTO tasty_bytes_dbt_db.raw.order_detail
-FROM @tasty_bytes_dbt_db.public.s3load/raw_pos/order_detail/;
+COPY INTO emerson_bytes_dbt_db.raw.order_detail
+FROM @emerson_bytes_dbt_db.public.s3load/raw_pos/order_detail/;
 
 -- setup completion note
-SELECT 'tasty_bytes_dbt_db setup is now complete' AS note;
+SELECT 'emerson_bytes_dbt_db setup is now complete' AS note;
